@@ -27,6 +27,10 @@ console.log('this will print first'); */
 
 ////////SERVER and basic ROUTING////////
 
+//Read API_DATA using sync instead of async so that the api gets called once and the data gets stored in a variable.
+const API_DATA = fs.readFileSync(`${__dirname}/dev-data/data.json`, `utf-8`);
+const dataObj = JSON.parse(API_DATA);
+
 const server = http.createServer((req, res) => {
   const pathName = req.url;
 
@@ -35,15 +39,7 @@ const server = http.createServer((req, res) => {
   } else if (pathName === '/product') {
     res.end('This is PRODUCT page 😍');
   } else if (pathName === '/api') {
-
-    fs.readFile(`${__dirname}/dev-data/data.json`, `utf-8`, (err, data) => {
-      if (err) {
-        console.log('ERROR ❌ :', err);
-      }
-      const productData = JSON.parse(data);
-      res.writeHead(200, { 'Content-type': 'application/json' });
-      res.end(data);
-    });
+    res.end(API_DATA);
   } else {
     res.writeHead(404, {
       'Content-type': 'text/html',
