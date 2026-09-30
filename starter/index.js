@@ -1,8 +1,11 @@
 const fs = require('fs');
+const http = require('http')
+
+///////FILES////////
 
 //i/o non blocking /async
 
-fs.readFile('./txt/start.txt', 'utf-8', (err, data1) => {
+/* fs.readFile('./txt/start.txt', 'utf-8', (err, data1) => {
     if (err) return console.log('Error ❌ :', err);
 
     fs.readFile(`./txt/${data1}.txt`, `utf-8`, (err, data2) => {
@@ -18,4 +21,16 @@ fs.readFile('./txt/start.txt', 'utf-8', (err, data1) => {
 
    
 });
-console.log('this will print first');
+console.log('this will print first'); */
+
+
+
+////////SERVER////////
+
+
+const server = http.createServer((req,res)=>{
+    res.end('Hello from the server 😍')
+});
+
+server.listen(8000,`127.0.0.1`,()=>
+console.log(`Server started successfully at http://localhost:8000 / 127.0.0.1 ... port:8000`))
