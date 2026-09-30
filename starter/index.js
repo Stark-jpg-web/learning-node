@@ -1,5 +1,6 @@
 const fs = require('fs');
 const http = require('http')
+const url = require('url')
 
 ///////FILES////////
 
@@ -25,12 +26,29 @@ console.log('this will print first'); */
 
 
 
-////////SERVER////////
+////////SERVER and basic ROUTING////////
 
 
 const server = http.createServer((req,res)=>{
-    res.end('Hello from the server 😍')
-});
+    const pathName = req.url;
 
-server.listen(8000,`127.0.0.1`,()=>
-console.log(`Server started successfully at http://localhost:8000 / 127.0.0.1 ... port:8000`))
+    if(pathName===`/overview`){
+        res.end('This is OVERVIEW page 😍')
+    }else if (pathName===`/product`){
+        res.end('This is PRODUCT page 😍')
+    }
+    else if (pathName===`/`){
+        res.end('This is HOME page 😍')
+    }
+    else{
+        res.writeHead(404,{
+            "content-type": "text/html",
+            "my-own-header": `hello-world`
+        })
+        res.end(`<h1>page not found!</h1>`)
+    }
+    
+});
+server.listen(8000,`127.0.0.1`,()=>{
+    console.log(`Server started successfully at http://localhost:8000 / 127.0.0.1 ... port:8000`)
+})
