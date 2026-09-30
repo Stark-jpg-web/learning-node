@@ -1,6 +1,6 @@
 const fs = require('fs');
-const http = require('http')
-const url = require('url')
+const http = require('http');
+const url = require('url');
 
 ///////FILES////////
 
@@ -24,32 +24,26 @@ const url = require('url')
 });
 console.log('this will print first'); */
 
-
-
 ////////SERVER and basic ROUTING////////
 
+const server = http.createServer((req, res) => {
+  const pathName = req.url;
 
-const server = http.createServer((req,res)=>{
-    const pathName = req.url;
-
-    if(pathName===`/overview`){
-        res.end('This is OVERVIEW page 😍')
-    }else if (pathName===`/product`){
-        res.end('This is PRODUCT page 😍')
-    }
-    else if (pathName===`/`){
-        res.end('This is HOME page 😍')
-    }
-    
-    else{
-        res.writeHead(404,{
-            "content-type": "text/html",
-            "my-own-header": `hello-world`
-        })
-        res.end(`<h1>page not found!</h1>`)
-    }
-    
+  if (pathName === '/' || pathName === '/overview') {
+    res.end('This is OVERVIEW page 😍');
+  } else if (pathName === '/product') {
+    res.end('This is PRODUCT page 😍');
+  } else {
+    res.writeHead(404, {
+      'Content-type': 'text/html',
+      'my-own-header': 'hello-world',
+    });
+    res.end('<h1>Page not found!</h1>');
+  }
 });
-server.listen(8000,`127.0.0.1`,()=>{
-    console.log(`Server started successfully at http://localhost:8000 / 127.0.0.1 ... port:8000`)
-})
+
+server.listen(8000, '127.0.0.1', () => {
+  console.log(
+    'Server started successfully at http://localhost:8000 / 127.0.0.1 ... port:8000'
+  );
+});
