@@ -40,6 +40,7 @@ const server = http.createServer((req,res)=>{
     else if (pathName===`/`){
         res.end('This is HOME page 😍')
     }
+    
     else{
         res.writeHead(404,{
             "content-type": "text/html",
