@@ -1,5 +1,6 @@
 const fs = require('fs');
 const http = require('http');
+const { stringify } = require('querystring');
 const url = require('url');
 
 ///////FILES////////
@@ -33,6 +34,16 @@ const server = http.createServer((req, res) => {
     res.end('This is OVERVIEW page 😍');
   } else if (pathName === '/product') {
     res.end('This is PRODUCT page 😍');
+  } else if (pathName === '/api') {
+
+    fs.readFile(`${__dirname}/dev-data/data.json`, `utf-8`, (err, data) => {
+      if (err) {
+        console.log('ERROR ❌ :', err);
+      }
+      const productData = JSON.parse(data);
+      res.writeHead(200, { 'Content-type': 'application/json' });
+      res.end(data);
+    });
   } else {
     res.writeHead(404, {
       'Content-type': 'text/html',
