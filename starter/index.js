@@ -40,6 +40,7 @@ const tempCard = fs.readFileSync(
   `${__dirname}/templates/card-template.html`,
   'utf-8'
 );
+
 function replaceHTML(temp, product) {
   let output = temp.replace(/{%PRODUCT_NAME%}/g, product.productName);
   output = output.replace(/{%IMAGE%}/g, product.image);
@@ -60,24 +61,26 @@ const API_DATA = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObj = JSON.parse(API_DATA);
 
 const cardHTML = dataObj.map((el) => replaceHTML(tempCard, el));
-console.log(cardHTML);
+
 const server = http.createServer((req, res) => {
-  const pathName = req.url;
+  const { query, pathname } = url.parse(req.url, true);
 
   //OVERVIEW
-  if (pathName === '/' || pathName === '/overview') {
+  if (pathname === '/' || pathname === '/overview') {
     res.writeHead(200, { 'Content-type': 'text/html' });
     res.end(tempOverview.replace(/{%PRODUCT_CARD%}/g, cardHTML));
   }
 
   //PRODUCT
-  else if (pathName === '/product') {
+  else if (pathname === `/product`) {
     res.writeHead(200, { 'Content-type': 'text/html' });
-    res.end(tempProduct);
+    const product = dataObj[query.id];
+    const output = replaceHTML(tempProduct, product);
+    res.end(output);
   }
 
   //API
-  else if (pathName === '/api') {
+  else if (pathname === '/api') {
     res.end(API_DATA);
   }
 
