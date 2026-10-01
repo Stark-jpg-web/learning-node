@@ -1,6 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 const url = require('url');
+const replaceHTML = require('../modules/replaceHTML');
 
 ///////FILES////////
 
@@ -40,22 +41,6 @@ const tempCard = fs.readFileSync(
   `${__dirname}/templates/card-template.html`,
   'utf-8'
 );
-
-function replaceHTML(temp, product) {
-  let output = temp.replace(/{%PRODUCT_NAME%}/g, product.productName);
-  output = output.replace(/{%IMAGE%}/g, product.image);
-  output = output.replace(/{%FROM%}/g, product.from);
-  output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
-  output = output.replace(/{%QUANTITY%}/g, product.quantity);
-  output = output.replace(/{%PRICE%}/g, product.price);
-  output = output.replace(/{%ID%}/g, product.id);
-  output = output.replace('{%DESCRIPTION%}', product.description);
-  if (!product.organic) {
-    output = output.replace('{%NOT_ORGANIC%}', 'not-organic');
-  }
-
-  return output;
-}
 
 const API_DATA = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObj = JSON.parse(API_DATA);
