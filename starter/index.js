@@ -1,6 +1,5 @@
 const fs = require('fs');
 const http = require('http');
-const { stringify } = require('querystring');
 const url = require('url');
 
 ///////FILES////////
@@ -28,19 +27,45 @@ console.log('this will print first'); */
 ////////SERVER and basic ROUTING////////
 
 //Read API_DATA using sync instead of async so that the api gets called once and the data gets stored in a variable.
-const API_DATA = fs.readFileSync(`${__dirname}/dev-data/data.json`, `utf-8`);
+
+const tempOverview = fs.readFileSync(
+  `${__dirname}/templates/overview-template.html`,
+  'utf-8'
+);
+const tempProduct = fs.readFileSync(
+  `${__dirname}/templates/product-template.html`,
+  'utf-8'
+);
+const tempCard = fs.readFileSync(
+  `${__dirname}/templates/card-template.html`,
+  'utf-8'
+);
+
+const API_DATA = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObj = JSON.parse(API_DATA);
 
 const server = http.createServer((req, res) => {
   const pathName = req.url;
 
+  //OVERVIEW
   if (pathName === '/' || pathName === '/overview') {
-    res.end('This is OVERVIEW page 😍');
-  } else if (pathName === '/product') {
-    res.end('This is PRODUCT page 😍');
-  } else if (pathName === '/api') {
+    res.writeHead(200, { 'Content-type': 'text/html' });
+    res.end(tempOverview);
+  }
+
+  //PRODUCT
+  else if (pathName === '/product') {
+    res.writeHead(200, { 'Content-type': 'text/html' });
+    res.end(tempProduct);
+  }
+
+  //API
+  else if (pathName === '/api') {
     res.end(API_DATA);
-  } else {
+  }
+
+  //NOT FOUND
+  else {
     res.writeHead(404, {
       'Content-type': 'text/html',
       'my-own-header': 'hello-world',
